@@ -12,14 +12,16 @@ export async function POST(req: NextRequest) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
+        model: "claude-sonnet-5",
         max_tokens: 1000,
         messages: [{ role: "user", content: prompt }],
       }),
     });
 
     if (!res.ok) {
-      return NextResponse.json({ error: "api_error" }, { status: 500 });
+      const errText = await res.text();
+      console.error("Anthropic API error:", errText);
+      return NextResponse.json({ error: "api_error", detail: errText }, { status: 500 });
     }
 
     const data = await res.json();
@@ -29,6 +31,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ result });
   } catch (err) {
+    console.error("Server error:", err);
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 }
