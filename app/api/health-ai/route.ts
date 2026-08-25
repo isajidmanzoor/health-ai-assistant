@@ -1,24 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 
+async function callGemini(prompt: string) {
+  return fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    }
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { prompt } = await req.json();
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    );
+    let res: Response | null = null;
+    let lastErr = "";
+    const maxRetries = 3;
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("Gemini API error:", errText);
-      return NextResponse.json({ error: "api_error", detail: errText }, { status: 500 });
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      res = await callGemini(prompt);
+      if (res.ok) break;
+
+      lastErr = await res.text();
+      const isOverloaded = res.status === 503 || res.status === 429;
+
+      if (!isOverloaded || attempt === maxRetries) break;
+
+      const waitMs = attempt * 1500;
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+
+    if (!res || !res.ok) {
+      console.error("Gemini API error:", lastErr);
+      return NextResponse.json({ error: "api_error", detail: lastErr }, { status: 500 });
     }
 
     const data = await res.json();

@@ -63,7 +63,10 @@ async function callClaude(prompt) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt })
   });
-  if (!res.ok) throw new Error("api_error");
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || "api_error");
+  }
   const data = await res.json();
   if (data.error) throw new Error(data.error);
   return data.result;
