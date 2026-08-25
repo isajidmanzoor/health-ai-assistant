@@ -58,20 +58,15 @@ const C = {
 };
 
 async function callClaude(prompt) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch("/api/health-ai", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1000,
-      messages: [{ role: "user", content: prompt }]
-    })
+    body: JSON.stringify({ prompt })
   });
   if (!res.ok) throw new Error("api_error");
   const data = await res.json();
-  const raw = data.content?.find(b => b.type === "text")?.text || "{}";
-  const clean = raw.replace(/```json/gi, "").replace(/```/g, "").trim();
-  return JSON.parse(clean);
+  if (data.error) throw new Error(data.error);
+  return data.result;
 }
 
 const card = { background: C.surface, borderRadius: 14, border: `1.5px solid ${C.border}`, padding: "1rem 1.25rem", marginBottom: 12, boxShadow: "0 1px 3px rgba(14,124,123,0.06)" };
