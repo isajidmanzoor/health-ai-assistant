@@ -208,9 +208,9 @@ function ECGMonitor({ vitals }) {
   const duration = Math.max(0.5, 60 / hr);
   const beat = { fontFamily: "'Courier New', monospace" };
   return (
-    <div style={{ background: D.monitorBg, borderRadius: 18, border: `1px solid rgba(57,255,136,0.25)`, padding: "1.1rem 1.2rem", position: "relative", overflow: "hidden", boxShadow: "0 0 40px rgba(57,255,136,0.08) inset" }}>
+    <div style={{ background: D.monitorBg, borderRadius: 18, border: `1px solid rgba(57,255,136,0.25)`, padding: "1.1rem 1.2rem", position: "relative", overflowX: "hidden", overflowY: "visible", boxShadow: "0 0 40px rgba(57,255,136,0.08) inset" }}>
       <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(57,255,136,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,136,0.05) 1px, transparent 1px)", backgroundSize: "20px 20px", pointerEvents: "none" }} />
-      <div style={{ position: "relative", overflow: "hidden", height: 70, marginBottom: 12, borderRadius: 8 }}>
+      <div style={{ position: "relative", overflowX: "hidden", overflowY: "visible", height: 70, marginBottom: 12, borderRadius: 8 }}>
         <svg viewBox="0 0 400 70" width="200%" height="70" style={{ animation: `hai-ecg-scroll ${duration * 2}s linear infinite` }}>
           {[0, 1].map(rep => (
             <polyline key={rep} transform={`translate(${rep * 200},0)`} points="0,35 20,35 30,35 36,15 42,55 48,10 54,35 70,35 100,35 106,25 112,45 118,35 200,35"
@@ -388,7 +388,7 @@ Answer the patient's latest question. Never prescribe medicine or exact doses; s
   const urgencyStyle = { low: [D.successBg, D.success, D.successBorder], medium: [D.warningBg, D.warning, D.warningBorder], high: [D.dangerBg, D.danger, D.dangerBorder] };
 
   return (
-    <div style={{ minHeight: "100%", background: D.bg, position: "relative", overflow: "hidden", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <div style={{ minHeight: "100%", background: D.bg, position: "relative", overflowX: "hidden", overflowY: "visible", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
       <style>{`
         @keyframes hai-spin { to { transform: rotate(360deg); } }
         @keyframes hai-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -420,7 +420,7 @@ Answer the patient's latest question. Never prescribe medicine or exact doses; s
       <div style={{ position: "absolute", bottom: -100, right: -60, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.22), transparent 70%)", filter: "blur(10px)", animation: "hai-blob 14s ease-in-out infinite reverse" }} />
 
       <div style={{ position: "relative", maxWidth: 680, margin: "0 auto", padding: "1.6rem 1.1rem" }}>
-        <h2 style={{ position: "absolute", width: 1, height: 1, overflow: "hidden" }}>HealthAI Ultra, an AI health assistant</h2>
+        <h2 style={{ position: "absolute", width: 1, height: 1, overflowX: "hidden", overflowY: "visible" }}>HealthAI Ultra, an AI health assistant</h2>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22 }}>
           <div>
