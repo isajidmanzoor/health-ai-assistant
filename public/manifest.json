@@ -1,7 +1,7 @@
 {
   "name": "HealthAI Ultra",
   "short_name": "HealthAI",
-  "description": "Premium AI-powered health companion",
+  "description": "Premium AI-powered health companion for symptom analysis, medicine interactions, and lab report insights.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#070B14",
